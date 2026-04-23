@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
     const reqMinutes = reqH * 60 + reqM
 
     // Check for conflicts within a 90-minute window
-    const BUFFER_MIN = 90
+    const BUFFER_MIN = 45
 
     const conflict = bookings
       .filter((b) => b.date === date && b.status !== 'cancelled')

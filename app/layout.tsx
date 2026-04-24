@@ -18,44 +18,45 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Soumaoro Signature — Chauffeur Privé Premium à Fougères',
+    default: 'Soumaoro Signature — Premium Private Chauffeur in Fougères',
     template: '%s | Soumaoro Signature VTC',
   },
   description:
-    'Chauffeur privé premium VTC à Fougères, Bretagne. Transferts aéroport, trajets longue distance, mise à disposition. Ponctualité, discrétion et confort haut de gamme.',
+    'Premium private chauffeur service (VTC) based in Fougères, Brittany. Airport transfers, long distance, hourly hire. Punctuality, discretion and luxury comfort.',
   keywords: [
     'VTC Fougères',
-    'chauffeur privé Fougères',
-    'transport premium Bretagne',
+    'private chauffeur Fougères',
+    'premium transport Brittany',
     'VTC Rennes',
-    'chauffeur privé Bretagne',
-    'taxi VIP Fougères',
-    'transfert aéroport Rennes',
+    'private driver Brittany',
+    'VIP taxi Fougères',
+    'Rennes airport transfer',
     'Soumaoro Signature',
+    'Tesla chauffeur France',
   ],
   authors: [{ name: 'Soumaoro Signature' }],
   creator: 'Soumaoro Signature',
   openGraph: {
     type: 'website',
-    locale: 'fr_FR',
+    locale: 'en_GB',
     url: 'https://soumaoro-signature.fr',
     siteName: 'Soumaoro Signature VTC',
-    title: 'Soumaoro Signature — Chauffeur Privé Premium à Fougères',
+    title: 'Soumaoro Signature — Premium Private Chauffeur in Fougères',
     description:
-      'Service de transport privé premium. Ponctualité, discrétion et confort haut de gamme en Bretagne.',
+      'Premium private transportation service. Punctuality, discretion and luxury comfort in Brittany.',
     images: [
       {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'SC Signature VTC Premium',
+        alt: 'Soumaoro Signature — Premium VTC',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Soumaoro Signature — VTC Premium Fougères',
-    description: 'Chauffeur privé premium à Fougères. Réservation en ligne 24h/24.',
+    title: 'Soumaoro Signature — Premium VTC Fougères',
+    description: 'Premium private chauffeur in Fougères. Online booking 24/7.',
   },
   robots: {
     index: true,
@@ -68,20 +69,13 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  verification: {
-    google: 'your-google-verification-code',
-  },
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={`${playfair.variable} ${inter.variable}`}>
+    <html lang="en" className={`${playfair.variable} ${inter.variable}`}>
       <head>
-        <link rel="canonical" href="https://sc-signature.fr" />
+        <link rel="canonical" href="https://soumaoro-signature.fr" />
         <meta name="theme-color" content="#0A0A0A" />
         <script
           type="application/ld+json"
@@ -90,13 +84,13 @@ export default function RootLayout({
               '@context': 'https://schema.org',
               '@type': 'LocalBusiness',
               name: 'Soumaoro Signature VTC',
-              description: 'Service de chauffeur privé premium à Fougères, Bretagne',
+              description: 'Premium private chauffeur service in Fougères, Brittany',
               url: 'https://soumaoro-signature.fr',
               telephone: '+33-6-XX-XX-XX-XX',
               address: {
                 '@type': 'PostalAddress',
                 addressLocality: 'Fougères',
-                addressRegion: 'Bretagne',
+                addressRegion: 'Brittany',
                 addressCountry: 'FR',
               },
               geo: {
@@ -105,7 +99,6 @@ export default function RootLayout({
                 longitude: -1.199,
               },
               priceRange: '€€€',
-              servesCuisine: 'Transport',
               aggregateRating: {
                 '@type': 'AggregateRating',
                 ratingValue: '4.9',
@@ -115,9 +108,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="bg-dark text-white antialiased">
-        {children}
-      </body>
+      <body className="bg-dark text-white antialiased">{children}</body>
     </html>
   )
 }

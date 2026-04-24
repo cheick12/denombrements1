@@ -3,13 +3,13 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu, X, Phone, ChevronDown } from 'lucide-react'
+import { Menu, X, Phone } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const navLinks = [
-  { href: '/', label: 'Accueil' },
+  { href: '/', label: 'Home' },
   { href: '/services', label: 'Services' },
-  { href: '/a-propos', label: 'À propos' },
+  { href: '/a-propos', label: 'About' },
   { href: '/contact', label: 'Contact' },
 ]
 
@@ -56,7 +56,7 @@ export default function Navigation() {
                   Soumaoro
                 </span>
                 <div className="text-[10px] text-gold/70 tracking-[0.2em] uppercase -mt-0.5">
-                  Chauffeur Privé
+                  Private Chauffeur
                 </div>
               </div>
             </Link>
@@ -98,7 +98,7 @@ export default function Navigation() {
                 href="/reservation"
                 className="btn-gold px-5 py-2.5 rounded text-sm text-[#0A0A0A] font-semibold tracking-widest uppercase"
               >
-                Réserver
+                Book Now
               </Link>
             </div>
 
@@ -173,7 +173,7 @@ export default function Navigation() {
             href="/reservation"
             className="btn-gold py-3 rounded text-center text-sm text-[#0A0A0A] font-semibold tracking-widest uppercase"
           >
-            Réserver maintenant
+            Book Now
           </Link>
         </div>
       </div>

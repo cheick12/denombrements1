@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { CheckCircle, Phone, Mail, ArrowLeft } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Réservation confirmée',
+  title: 'Booking confirmed',
   robots: { index: false, follow: false },
 }
 
@@ -14,7 +14,7 @@ export default function ConfirmationPage({
 }: {
   searchParams: { id?: string }
 }) {
-  const bookingId = searchParams.id || 'SC-XXXXXX'
+  const bookingId = searchParams.id || 'SS-XXXXXX'
 
   return (
     <>
@@ -28,20 +28,19 @@ export default function ConfirmationPage({
 
           {/* Title */}
           <h1 className="font-serif text-4xl text-white mb-3 animate-slide-up">
-            Réservation confirmée !
+            Booking confirmed!
           </h1>
 
           {/* Booking ID */}
           <div className="inline-flex items-center gap-2 px-5 py-2 rounded border border-gold/25 bg-gold/5 text-gold font-mono text-sm mb-6 animate-fade-in">
-            Réservation #{bookingId}
+            Booking #{bookingId}
           </div>
 
           <p className="text-white/60 mb-2">
-            Un email de confirmation a été envoyé à votre adresse.
+            A confirmation email has been sent to your address.
           </p>
           <p className="text-white/40 text-sm mb-10">
-            Votre chauffeur vous contactera 30 minutes avant la prise en charge pour confirmer
-            son arrivée.
+            Your chauffeur will contact you 30 minutes before pickup to confirm their arrival.
           </p>
 
           {/* Info cards */}
@@ -49,10 +48,10 @@ export default function ConfirmationPage({
             <div className="glass-card rounded-xl p-5 text-left">
               <div className="flex items-center gap-2 text-gold text-sm font-semibold mb-2">
                 <Phone className="w-4 h-4" />
-                Besoin d'aide ?
+                Need help?
               </div>
               <p className="text-white/50 text-sm mb-3">
-                Appelez-nous pour toute modification de dernière minute.
+                Call us for any last-minute changes.
               </p>
               <a href="tel:+33600000000" className="text-white text-sm hover:text-gold transition-colors">
                 06 XX XX XX XX
@@ -64,8 +63,7 @@ export default function ConfirmationPage({
                 Confirmation email
               </div>
               <p className="text-white/50 text-sm">
-                Vérifiez votre boîte de réception et vos spams. L'email contient tous les
-                détails de votre trajet.
+                Check your inbox and spam folder. The email contains all your journey details.
               </p>
             </div>
           </div>
@@ -77,13 +75,13 @@ export default function ConfirmationPage({
               className="btn-outline-gold inline-flex items-center justify-center gap-2 px-6 py-3 rounded text-sm font-semibold tracking-widest uppercase"
             >
               <ArrowLeft className="w-4 h-4" />
-              Retour à l'accueil
+              Back to home
             </Link>
             <Link
               href="/reservation"
               className="btn-gold inline-flex items-center justify-center gap-2 px-6 py-3 rounded text-[#0A0A0A] text-sm font-semibold tracking-widest uppercase"
             >
-              Nouvelle réservation
+              New booking
             </Link>
           </div>
         </div>

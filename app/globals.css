@@ -179,11 +179,82 @@ body {
 /* Smooth appear animation for sections */
 .appear {
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
 }
 
 .appear.visible {
   opacity: 1;
   transform: translateY(0);
 }
+
+/* Ken Burns cinematic shot animations */
+@keyframes kenBurns1 {
+  0%   { transform: scale(1)    translate(0, 0); }
+  100% { transform: scale(1.18) translate(-3%, -2%); }
+}
+@keyframes kenBurns2 {
+  0%   { transform: scale(1.12) translate(2%, 1%); }
+  100% { transform: scale(1)    translate(0, 0); }
+}
+@keyframes kenBurns3 {
+  0%   { transform: scale(1)    translate(1%, 2%); }
+  100% { transform: scale(1.15) translate(-2%, -1%); }
+}
+@keyframes kenBurns4 {
+  0%   { transform: scale(1.1)  translate(-2%, 0); }
+  100% { transform: scale(1)    translate(2%, 2%); }
+}
+@keyframes kenBurns5 {
+  0%   { transform: scale(1)    translate(0, -1%); }
+  100% { transform: scale(1.12) translate(-2%, 1%); }
+}
+
+/* 3D card perspective hover */
+.card-3d-wrap {
+  perspective: 1000px;
+}
+.card-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+.card-3d:hover {
+  transform: rotateY(-6deg) rotateX(4deg) translateZ(12px);
+  box-shadow: 24px 24px 60px rgba(0,0,0,0.5), 0 0 30px rgba(201,169,110,0.08);
+}
+
+/* Float animation for hero badges */
+@keyframes floatY {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+.float-badge {
+  animation: floatY 4s ease-in-out infinite;
+}
+.float-badge:nth-child(2) { animation-delay: 1.3s; }
+.float-badge:nth-child(3) { animation-delay: 2.6s; }
+
+/* Slider caption slide-up */
+@keyframes captionIn {
+  0%   { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.caption-animate {
+  animation: captionIn 0.6s ease forwards;
+}
+
+/* 3D scroll-reveal */
+@keyframes revealUp3d {
+  0%   { opacity: 0; transform: translateY(40px) translateZ(-30px); }
+  100% { opacity: 1; transform: translateY(0) translateZ(0); }
+}
+.reveal-3d {
+  opacity: 0;
+  animation: none;
+}
+.reveal-3d.visible {
+  animation: revealUp3d 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.reveal-3d:nth-child(2) { animation-delay: 0.1s; }
+.reveal-3d:nth-child(3) { animation-delay: 0.2s; }
+.reveal-3d:nth-child(4) { animation-delay: 0.3s; }

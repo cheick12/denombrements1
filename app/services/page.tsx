@@ -2,105 +2,104 @@ import type { Metadata } from 'next'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import Link from 'next/link'
-import { Plane, MapPin, Timer, Globe, Car, CheckCircle, ArrowRight } from 'lucide-react'
+import { Plane, MapPin, Timer, Globe, CheckCircle, ArrowRight } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Nos Services VTC Premium',
+  title: 'Premium VTC Services',
   description:
-    'Découvrez tous nos services : transferts aéroport (Rennes, Nantes, Paris CDG), mise à disposition, longue distance, événements. Chauffeur privé premium à Fougères.',
+    'Discover all our services: airport transfers (Rennes, Nantes, Paris CDG), chauffeur by the hour, long distance, events. Premium private chauffeur in Fougères.',
 }
 
 const services = [
   {
-    id: 'aeroport',
+    id: 'airport',
     icon: Plane,
-    title: 'Transferts Aéroport',
-    tagline: 'Ponctualité absolue, zéro stress',
-    description: `Nos transferts aéroport sont pensés pour vous offrir une expérience sans stress de bout en bout.
-    Nous suivons votre vol en temps réel pour adapter notre heure d'arrivée à d'éventuels retards.
-    Nous vous attendons à la sortie des arrivées, panneau à votre nom, prêts à charger vos bagages.`,
+    title: 'Airport Transfers',
+    tagline: 'Absolute punctuality, zero stress',
+    description: `Our airport transfers are designed to give you a completely stress-free experience from door to door.
+    We track your flight in real time and adjust our arrival to match any delays.
+    We meet you at arrivals with a name board, ready to load your luggage.`,
     features: [
-      'Suivi de vol en temps réel',
-      'Attente gratuite 30 minutes après l\'atterrissage',
-      'Aide aux bagages incluse',
-      'Tarifs fixes garantis (pas de surprise)',
-      'Disponible 24h/24 — 7j/7',
-      'Accueil personnalisé avec panneau',
+      'Real-time flight tracking',
+      'Free waiting up to 30 min after landing',
+      'Luggage assistance included',
+      'Fixed fares — no surprises',
+      'Available 24/7',
+      'Personalised name-board greeting',
     ],
     prices: [
-      { dest: 'Aéroport de Rennes (RNS)', price: '85€' },
-      { dest: 'Aéroport de Nantes (NTE)', price: '140€' },
-      { dest: 'Aéroport Paris CDG', price: '350€' },
-      { dest: 'Aéroport Paris Orly', price: '370€' },
+      { dest: 'Rennes Airport (RNS)', price: '€85' },
+      { dest: 'Nantes Airport (NTE)', price: '€140' },
+      { dest: 'Paris CDG', price: '€350' },
+      { dest: 'Paris Orly', price: '€370' },
     ],
   },
   {
-    id: 'longue-distance',
+    id: 'long-distance',
     icon: MapPin,
-    title: 'Longue Distance',
-    tagline: 'La France à votre service',
-    description: `Partez sereinement vers Paris, Lyon, Bordeaux ou toute autre ville française.
-    Profitez du trajet pour travailler, vous reposer ou simplement vous déconnecter pendant que
-    votre chauffeur gère la route. Une alternative élégante au train ou à la voiture personnelle.`,
+    title: 'Long Distance',
+    tagline: 'All of France at your service',
+    description: `Travel serenely to Paris, Lyon, Bordeaux or any French city.
+    Use the journey to work, rest or simply disconnect while your chauffeur handles the road.
+    An elegant alternative to the train or driving yourself.`,
     features: [
-      'Wi-Fi haut débit à bord',
-      'Eau minérale et collations',
-      'Musique selon vos préférences',
-      'Pauses selon vos besoins',
-      'Aucun stress de stationnement',
-      'Devis personnalisé',
+      'High-speed Wi-Fi on board',
+      'Still water and light snacks',
+      'Music tailored to your taste',
+      'Stops whenever you need',
+      'No parking stress',
+      'Custom quote for every trip',
     ],
     prices: [
-      { dest: 'Fougères → Paris', price: '350€' },
-      { dest: 'Fougères → Caen', price: '180€' },
-      { dest: 'Fougères → Tours', price: '220€' },
-      { dest: 'Sur devis pour toute destination', price: 'Devis' },
+      { dest: 'Fougères → Paris', price: '€350' },
+      { dest: 'Fougères → Caen', price: '€180' },
+      { dest: 'Fougères → Tours', price: '€220' },
+      { dest: 'Any destination', price: 'Quote' },
     ],
   },
   {
-    id: 'disposition',
+    id: 'hourly',
     icon: Timer,
-    title: 'Mise à Disposition',
-    tagline: 'Votre chauffeur, votre agenda',
-    description: `Idéal pour les journées chargées : rendez-vous multiples, visites de sites,
-    tournées commerciales ou journée à Paris. Votre chauffeur reste disponible toute la durée
-    que vous souhaitez, s'adaptant à votre planning en temps réel.`,
+    title: 'Chauffeur by the Hour',
+    tagline: 'Your chauffeur, your schedule',
+    description: `Perfect for busy days: multiple meetings, site visits, business tours or a full day in Paris.
+    Your chauffeur remains at your disposal for as long as you need, adapting to your schedule in real time.`,
     features: [
-      'Minimum 2 heures',
-      'Kilométrage illimité inclus',
-      'Itinéraire entièrement flexible',
-      'Attente entre rendez-vous',
-      'Facturation à l\'heure réelle',
-      'Disponible en semaine et week-end',
+      'Minimum 2 hours',
+      'Unlimited mileage included',
+      'Fully flexible itinerary',
+      'Waiting between appointments',
+      'Billed by the actual hour',
+      'Available weekdays and weekends',
     ],
     prices: [
-      { dest: 'Tarif horaire', price: '30€/h' },
-      { dest: 'Demi-journée (4h)', price: '100€' },
-      { dest: 'Journée complète (8h)', price: '190€' },
-      { dest: 'Sur devis pour durées spéciales', price: 'Devis' },
+      { dest: 'Hourly rate', price: '€30/h' },
+      { dest: 'Half day (4h)', price: '€100' },
+      { dest: 'Full day (8h)', price: '€190' },
+      { dest: 'Extended durations', price: 'Quote' },
     ],
   },
   {
-    id: 'evenements',
+    id: 'events',
     icon: Globe,
-    title: 'Événements & Occasions Spéciales',
-    tagline: 'Chaque moment mérite l\'excellence',
-    description: `Mariages, soirées d'entreprise, remises de prix, cérémonies : faites de chaque
-    événement un souvenir inoubliable. Votre chauffeur en tenue irréprochable, véhicule décoré
-    sur demande, service personnalisé pour chaque occasion.`,
+    title: 'Events & Special Occasions',
+    tagline: 'Every moment deserves excellence',
+    description: `Weddings, corporate dinners, award ceremonies, galas — make every event an unforgettable memory.
+    Your chauffeur arrives impeccably dressed, vehicle decorated on request,
+    with a personalised service tailored to each occasion.`,
     features: [
-      'Tenue de soirée sur demande',
-      'Décoration du véhicule possible',
-      'Champagne à bord (sur réservation)',
-      'Service de type hôtelier',
-      'Confidentialité totale',
-      'Navettes pour groupes disponibles',
+      'Black-tie attire on request',
+      'Vehicle decoration available',
+      'Champagne on board (pre-booked)',
+      'Hotel-level concierge service',
+      'Total confidentiality',
+      'Group shuttle runs available',
     ],
     prices: [
-      { dest: 'Mariage (forfait journée)', price: 'Sur devis' },
-      { dest: 'Soirée d\'entreprise', price: 'Sur devis' },
-      { dest: 'Transfert VIP événement', price: 'À partir de 85€' },
-      { dest: 'Navettes (par trajet)', price: 'À partir de 60€' },
+      { dest: 'Wedding (full-day package)', price: 'Quote' },
+      { dest: 'Corporate evening', price: 'Quote' },
+      { dest: 'VIP event transfer', price: 'From €85' },
+      { dest: 'Shuttle (per journey)', price: 'From €60' },
     ],
   },
 ]
@@ -117,16 +116,16 @@ export default function ServicesPage() {
             <div className="flex items-center justify-center gap-3 mb-4">
               <div className="h-px w-12 bg-gold" />
               <span className="text-gold text-xs tracking-[0.3em] uppercase font-semibold">
-                Nos Prestations
+                Our Services
               </span>
               <div className="h-px w-12 bg-gold" />
             </div>
             <h1 className="font-serif text-5xl md:text-6xl font-bold text-white mb-5">
-              Services VTC Premium
+              Premium VTC Services
             </h1>
             <p className="text-white/50 text-xl max-w-2xl mx-auto">
-              Chaque prestation est une promesse de qualité. Nous adaptons notre service à
-              chacun de vos besoins, du plus simple au plus exigeant.
+              Every service is a promise of quality. We tailor our offering to your needs —
+              from the straightforward to the truly exceptional.
             </p>
           </div>
         </div>
@@ -171,32 +170,34 @@ export default function ServicesPage() {
                     href="/reservation"
                     className="btn-gold inline-flex items-center gap-2 px-6 py-3.5 rounded text-[#0A0A0A] text-sm font-semibold tracking-widest uppercase"
                   >
-                    Réserver ce service
+                    Book this service
                     <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
 
                 {/* Price card */}
                 <div className={idx % 2 === 1 ? 'lg:col-start-1' : ''}>
-                  <div className="glass-card rounded-xl overflow-hidden">
-                    <div className="px-6 py-4 border-b border-white/5">
-                      <h3 className="text-white/70 text-xs tracking-widest uppercase font-semibold">
-                        Tarification
-                      </h3>
-                    </div>
-                    <div className="divide-y divide-white/5">
-                      {prices.map(({ dest, price }) => (
-                        <div key={dest} className="flex justify-between items-center px-6 py-4">
-                          <span className="text-white/60 text-sm">{dest}</span>
-                          <span className="text-gold font-semibold">{price}</span>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="px-6 py-4 bg-gold/5 border-t border-gold/10">
-                      <p className="text-white/30 text-xs">
-                        * Tarifs indicatifs. Prix confirmé à la réservation.
-                        Majoration nuit (+15%) entre 20h et 7h.
-                      </p>
+                  <div className="glass-card rounded-xl overflow-hidden card-3d-wrap">
+                    <div className="card-3d">
+                      <div className="px-6 py-4 border-b border-white/5">
+                        <h3 className="text-white/70 text-xs tracking-widest uppercase font-semibold">
+                          Pricing
+                        </h3>
+                      </div>
+                      <div className="divide-y divide-white/5">
+                        {prices.map(({ dest, price }) => (
+                          <div key={dest} className="flex justify-between items-center px-6 py-4">
+                            <span className="text-white/60 text-sm">{dest}</span>
+                            <span className="text-gold font-semibold">{price}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="px-6 py-4 bg-gold/5 border-t border-gold/10">
+                        <p className="text-white/30 text-xs">
+                          * Indicative fares. Price confirmed at booking.
+                          Night surcharge (+15%) between 8 pm and 7 am.
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -205,29 +206,29 @@ export default function ServicesPage() {
           </div>
         </div>
 
-        {/* FAQ bar */}
+        {/* FAQ */}
         <section className="bg-dark-100 border-t border-white/5 py-16">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="font-serif text-3xl text-white text-center mb-10">
-              Questions fréquentes
+              Frequently asked questions
             </h2>
             <div className="space-y-4">
               {[
                 {
-                  q: 'Puis-je annuler ou modifier ma réservation ?',
-                  a: 'Oui, toute annulation est gratuite jusqu\'à 24h avant le départ. En dessous de 24h, 50% du montant est retenu.',
+                  q: 'Can I cancel or modify my booking?',
+                  a: 'Yes, cancellations are free up to 24 hours before departure. Within 24 hours, 50% of the fare is retained.',
                 },
                 {
-                  q: 'Le paiement se fait comment ?',
-                  a: 'Par carte bancaire en ligne, en espèces à bord ou par virement bancaire pour les entreprises.',
+                  q: 'How do I pay?',
+                  a: 'By credit card online, cash on board, or bank transfer for corporate clients.',
                 },
                 {
-                  q: 'Acceptez-vous les animaux de compagnie ?',
-                  a: 'Oui, les petits animaux de compagnie sont acceptés avec leur caisse de transport.',
+                  q: 'Do you accept pets?',
+                  a: 'Yes, small pets are welcome in an appropriate carrier.',
                 },
                 {
-                  q: 'Proposez-vous des factures pour les entreprises ?',
-                  a: 'Absolument. Une facture TVA est émise pour chaque prestation professionnelle.',
+                  q: 'Do you provide invoices for businesses?',
+                  a: 'Absolutely. A VAT invoice is issued for every professional journey.',
                 },
               ].map(({ q, a }) => (
                 <details key={q} className="glass-card rounded-xl group">

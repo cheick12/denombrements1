@@ -2,21 +2,21 @@ import Link from 'next/link'
 import { Phone, Mail, MapPin, Instagram, Facebook, Clock, Shield, Star } from 'lucide-react'
 
 const quickLinks = [
-  { href: '/', label: 'Accueil' },
-  { href: '/reservation', label: 'Réserver' },
+  { href: '/', label: 'Home' },
+  { href: '/reservation', label: 'Book a Ride' },
   { href: '/services', label: 'Services' },
-  { href: '/a-propos', label: 'À propos' },
+  { href: '/a-propos', label: 'About' },
   { href: '/contact', label: 'Contact' },
-  { href: '/admin', label: 'Espace admin' },
+  { href: '/admin', label: 'Admin' },
 ]
 
 const services = [
-  'Transfert aéroport Rennes',
-  'Transfert aéroport Nantes',
-  'Transfert aéroport Paris CDG',
-  'Mise à disposition',
-  'Longue distance',
-  'Événements & soirées',
+  'Rennes Airport Transfer',
+  'Nantes Airport Transfer',
+  'Paris CDG Airport Transfer',
+  'Chauffeur by the Hour',
+  'Long Distance',
+  'Events & Special Occasions',
 ]
 
 export default function Footer() {
@@ -27,10 +27,10 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             {[
-              { icon: Shield, label: 'Assurance Pro', sub: 'Couverture complète' },
-              { icon: Star, label: '4.9 / 5', sub: '87 avis vérifiés' },
-              { icon: Clock, label: '24h/24 — 7j/7', sub: 'Toujours disponible' },
-              { icon: MapPin, label: 'Fougères', sub: 'Bretagne & France' },
+              { icon: Shield, label: 'Pro Insurance', sub: 'Full coverage' },
+              { icon: Star, label: '4.9 / 5', sub: '87 verified reviews' },
+              { icon: Clock, label: '24h / 7 days', sub: 'Always available' },
+              { icon: MapPin, label: 'Fougères', sub: 'Brittany & All of France' },
             ].map(({ icon: Icon, label, sub }) => (
               <div key={label} className="flex flex-col items-center gap-1">
                 <Icon className="w-5 h-5 text-gold mb-1" />
@@ -56,13 +56,13 @@ export default function Footer() {
                   Soumaoro
                 </div>
                 <div className="text-[10px] text-gold/60 tracking-[0.2em] uppercase -mt-0.5">
-                  Signature — Chauffeur Privé
+                  Signature — Private Chauffeur
                 </div>
               </div>
             </div>
             <p className="text-white/50 text-sm leading-relaxed mb-6">
-              Soumaoro Signature — Service de transport privé haut de gamme à Fougères.
-              Ponctualité, discrétion et excellence à chaque trajet.
+              Soumaoro Signature — Premium private transportation based in Fougères.
+              Punctuality, discretion and excellence on every journey.
             </p>
             <div className="flex gap-3">
               <a
@@ -135,13 +135,13 @@ export default function Footer() {
                   >
                     06 XX XX XX XX
                   </a>
-                  <div className="text-white/30 text-xs mt-0.5">Disponible 24h/24</div>
+                  <div className="text-white/30 text-xs mt-0.5">Available 24/7</div>
                 </div>
               </li>
               <li className="flex gap-3">
                 <Mail className="w-4 h-4 text-gold shrink-0 mt-0.5" />
                 <a
-                  href="mailto:contact@sc-signature.fr"
+                  href="mailto:contact@soumaoro-signature.fr"
                   className="text-white/70 hover:text-white text-sm transition-colors"
                 >
                   contact@soumaoro-signature.fr
@@ -149,7 +149,7 @@ export default function Footer() {
               </li>
               <li className="flex gap-3">
                 <MapPin className="w-4 h-4 text-gold shrink-0 mt-0.5" />
-                <span className="text-white/50 text-sm">Fougères, Bretagne</span>
+                <span className="text-white/50 text-sm">Fougères, Brittany</span>
               </li>
             </ul>
 
@@ -174,16 +174,16 @@ export default function Footer() {
       <div className="border-t border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white/30">
-            <span>© {new Date().getFullYear()} Soumaoro Signature. Tous droits réservés.</span>
+            <span>© {new Date().getFullYear()} Soumaoro Signature. All rights reserved.</span>
             <div className="flex gap-4">
               <Link href="/mentions-legales" className="hover:text-gold transition-colors">
-                Mentions légales
+                Legal Notice
               </Link>
               <Link href="/confidentialite" className="hover:text-gold transition-colors">
-                Confidentialité
+                Privacy Policy
               </Link>
               <Link href="/cgv" className="hover:text-gold transition-colors">
-                CGV
+                Terms & Conditions
               </Link>
             </div>
           </div>

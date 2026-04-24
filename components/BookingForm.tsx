@@ -1,13 +1,10 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import { useRouter } from 'next/navigation'
 import {
   MapPin,
   Calendar,
   Clock,
-  Users,
-  Briefcase,
   ChevronRight,
   ChevronLeft,
   Car,
@@ -23,12 +20,12 @@ import { cn, getMinDate } from '@/lib/utils'
 import type { TripType, PricingResponse } from '@/lib/types'
 
 const TRIP_TYPES: { value: TripType; label: string; description: string; icon: typeof Car }[] = [
-  { value: 'simple', label: 'Trajet simple', description: "D'un point A à un point B", icon: Car },
-  { value: 'retour', label: 'Aller-retour', description: '10% de remise sur le retour', icon: RotateCcw },
-  { value: 'mise_a_disposition', label: 'Mise à disposition', description: "Chauffeur dédié à l'heure", icon: Timer },
-  { value: 'aeroport_rennes', label: 'Aéroport Rennes', description: 'Transfert forfait — 85€', icon: Plane },
-  { value: 'aeroport_nantes', label: 'Aéroport Nantes', description: 'Transfert forfait — 140€', icon: Plane },
-  { value: 'aeroport_paris', label: 'Aéroport Paris CDG', description: 'Transfert forfait — 350€', icon: Plane },
+  { value: 'simple', label: 'One Way', description: 'From point A to point B', icon: Car },
+  { value: 'retour', label: 'Round Trip', description: '10% discount on the return', icon: RotateCcw },
+  { value: 'mise_a_disposition', label: 'Hourly Chauffeur', description: 'Dedicated driver by the hour', icon: Timer },
+  { value: 'aeroport_rennes', label: 'Rennes Airport', description: 'Fixed fare — €85', icon: Plane },
+  { value: 'aeroport_nantes', label: 'Nantes Airport', description: 'Fixed fare — €140', icon: Plane },
+  { value: 'aeroport_paris', label: 'Paris CDG Airport', description: 'Fixed fare — €350', icon: Plane },
 ]
 
 interface FormData {
@@ -67,10 +64,9 @@ const INITIAL: FormData = {
   notes: '',
 }
 
-const STEP_LABELS = ['Itinéraire', 'Options', 'Tarif', 'Coordonnées', 'Confirmation']
+const STEP_LABELS = ['Itinerary', 'Options', 'Quote', 'Details', 'Confirmed']
 
 export default function BookingForm() {
-  const router = useRouter()
   const [step, setStep] = useState(0)
   const [form, setForm] = useState<FormData>(INITIAL)
   const [pricing, setPricing] = useState<PricingResponse | null>(null)
@@ -86,25 +82,24 @@ export default function BookingForm() {
     setLoadingPrice(true)
     setPriceError('')
     try {
-      const body = {
-        departure: form.departure,
-        arrival: form.arrival,
-        date: form.date,
-        time: form.time,
-        tripType: form.tripType,
-        passengers: form.passengers,
-        disposalHours: form.disposalHours,
-      }
       const res = await fetch('/api/pricing', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
+        body: JSON.stringify({
+          departure: form.departure,
+          arrival: form.arrival,
+          date: form.date,
+          time: form.time,
+          tripType: form.tripType,
+          passengers: form.passengers,
+          disposalHours: form.disposalHours,
+        }),
       })
-      if (!res.ok) throw new Error('Erreur de calcul')
+      if (!res.ok) throw new Error()
       const data: PricingResponse = await res.json()
       setPricing(data)
     } catch {
-      setPriceError('Impossible de calculer le tarif. Veuillez réessayer.')
+      setPriceError('Unable to calculate the fare. Please try again.')
     } finally {
       setLoadingPrice(false)
     }
@@ -129,12 +124,12 @@ export default function BookingForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...form, pricing }),
       })
-      if (!res.ok) throw new Error('Erreur de réservation')
+      if (!res.ok) throw new Error()
       const data = await res.json()
       setBookingId(data.id)
       setStep(4)
     } catch {
-      alert('Une erreur est survenue. Veuillez réessayer ou nous appeler directement.')
+      alert('An error occurred. Please try again or call us directly.')
     } finally {
       setSubmitting(false)
     }
@@ -195,18 +190,18 @@ export default function BookingForm() {
       {/* STEP 0 — Itinerary */}
       {step === 0 && (
         <div className="space-y-6 animate-fade-in">
-          <h2 className="font-serif text-2xl text-white">Votre itinéraire</h2>
+          <h2 className="font-serif text-2xl text-white">Your itinerary</h2>
 
           <div className="space-y-4">
             <div>
               <label className="block text-xs text-white/50 mb-2 tracking-wide uppercase">
-                Adresse de départ
+                Pickup address
               </label>
               <div className="relative">
                 <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gold" />
                 <input
                   type="text"
-                  placeholder="ex: Fougères, 35300"
+                  placeholder="e.g. Fougères, 35300"
                   value={form.departure}
                   onChange={(e) => set('departure', e.target.value)}
                   className="input-dark pl-10"
@@ -217,13 +212,13 @@ export default function BookingForm() {
             {form.tripType !== 'mise_a_disposition' && (
               <div>
                 <label className="block text-xs text-white/50 mb-2 tracking-wide uppercase">
-                  Adresse d'arrivée
+                  Drop-off address
                 </label>
                 <div className="relative">
                   <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gold/60" />
                   <input
                     type="text"
-                    placeholder="ex: Rennes, Aéroport"
+                    placeholder="e.g. Rennes Airport"
                     value={form.arrival}
                     onChange={(e) => set('arrival', e.target.value)}
                     className="input-dark pl-10"
@@ -250,7 +245,7 @@ export default function BookingForm() {
               </div>
               <div>
                 <label className="block text-xs text-white/50 mb-2 tracking-wide uppercase">
-                  Heure
+                  Time
                 </label>
                 <div className="relative">
                   <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gold/60" />
@@ -267,7 +262,7 @@ export default function BookingForm() {
             {/* Trip type */}
             <div>
               <label className="block text-xs text-white/50 mb-3 tracking-wide uppercase">
-                Type de prestation
+                Service type
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {TRIP_TYPES.map(({ value, label, description, icon: Icon }) => (
@@ -298,13 +293,13 @@ export default function BookingForm() {
       {/* STEP 1 — Options */}
       {step === 1 && (
         <div className="space-y-6 animate-fade-in">
-          <h2 className="font-serif text-2xl text-white">Options du trajet</h2>
+          <h2 className="font-serif text-2xl text-white">Journey options</h2>
 
           <div className="space-y-5">
             {/* Passengers */}
             <div>
               <label className="block text-xs text-white/50 mb-3 tracking-wide uppercase">
-                Nombre de passagers
+                Number of passengers
               </label>
               <div className="flex gap-2">
                 {[1, 2, 3, 4, 5, 6, 7].map((n) => (
@@ -328,7 +323,7 @@ export default function BookingForm() {
             {/* Luggage */}
             <div>
               <label className="block text-xs text-white/50 mb-3 tracking-wide uppercase">
-                Bagages (valises)
+                Luggage (suitcases)
               </label>
               <div className="flex gap-2">
                 {[0, 1, 2, 3, 4].map((n) => (
@@ -353,7 +348,7 @@ export default function BookingForm() {
             {form.tripType === 'mise_a_disposition' && (
               <div>
                 <label className="block text-xs text-white/50 mb-3 tracking-wide uppercase">
-                  Durée de mise à disposition
+                  Duration
                 </label>
                 <div className="flex gap-2 flex-wrap">
                   {[2, 3, 4, 5, 6, 8, 10].map((h) => (
@@ -378,11 +373,11 @@ export default function BookingForm() {
             {/* Return details */}
             {form.tripType === 'retour' && (
               <div className="p-4 rounded border border-gold/20 bg-gold/5 space-y-4">
-                <div className="text-sm text-gold font-medium">Informations du retour</div>
+                <div className="text-sm text-gold font-medium">Return journey details</div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs text-white/50 mb-2 tracking-wide uppercase">
-                      Date retour
+                      Return date
                     </label>
                     <input
                       type="date"
@@ -394,7 +389,7 @@ export default function BookingForm() {
                   </div>
                   <div>
                     <label className="block text-xs text-white/50 mb-2 tracking-wide uppercase">
-                      Heure retour
+                      Return time
                     </label>
                     <input
                       type="time"
@@ -410,21 +405,21 @@ export default function BookingForm() {
             {/* Summary */}
             <div className="p-4 rounded border border-white/5 bg-dark-200 space-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-white/50">Départ</span>
+                <span className="text-white/50">Pickup</span>
                 <span className="text-white">{form.departure || '—'}</span>
               </div>
               {form.tripType !== 'mise_a_disposition' && (
                 <div className="flex justify-between">
-                  <span className="text-white/50">Arrivée</span>
+                  <span className="text-white/50">Drop-off</span>
                   <span className="text-white">{form.arrival || '—'}</span>
                 </div>
               )}
               <div className="flex justify-between">
-                <span className="text-white/50">Date & heure</span>
-                <span className="text-white">{form.date} à {form.time}</span>
+                <span className="text-white/50">Date & time</span>
+                <span className="text-white">{form.date} at {form.time}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-white/50">Passagers</span>
+                <span className="text-white/50">Passengers</span>
                 <span className="text-white">{form.passengers}</span>
               </div>
             </div>
@@ -435,12 +430,12 @@ export default function BookingForm() {
       {/* STEP 2 — Pricing */}
       {step === 2 && (
         <div className="space-y-6 animate-fade-in">
-          <h2 className="font-serif text-2xl text-white">Devis de votre trajet</h2>
+          <h2 className="font-serif text-2xl text-white">Your fare estimate</h2>
 
           {loadingPrice && (
             <div className="flex flex-col items-center justify-center py-16 gap-4">
               <Loader2 className="w-8 h-8 text-gold animate-spin" />
-              <p className="text-white/50 text-sm">Calcul du tarif en cours…</p>
+              <p className="text-white/50 text-sm">Calculating your fare…</p>
             </div>
           )}
 
@@ -449,11 +444,8 @@ export default function BookingForm() {
               <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
               <div>
                 <p className="text-red-400 text-sm">{priceError}</p>
-                <button
-                  onClick={fetchPrice}
-                  className="text-xs text-red-400/70 underline mt-1"
-                >
-                  Réessayer
+                <button onClick={fetchPrice} className="text-xs text-red-400/70 underline mt-1">
+                  Try again
                 </button>
               </div>
             </div>
@@ -461,18 +453,17 @@ export default function BookingForm() {
 
           {pricing && !loadingPrice && (
             <>
-              {/* Price card */}
               <div className="glass-card rounded-xl p-6">
                 <div className="flex items-start justify-between mb-6">
                   <div>
-                    <div className="text-white/50 text-sm mb-1">Prix total estimé</div>
+                    <div className="text-white/50 text-sm mb-1">Estimated total</div>
                     <div className="font-serif text-5xl font-bold text-gradient-gold">
                       {pricing.price}€
                     </div>
                     {pricing.isNightRate && (
                       <div className="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-amber-500/15 text-amber-400 text-xs">
                         <Clock className="w-3 h-3" />
-                        Tarif nuit appliqué
+                        Night rate applied
                       </div>
                     )}
                   </div>
@@ -490,11 +481,10 @@ export default function BookingForm() {
 
                 <div className="gold-line mb-5" />
 
-                {/* Price breakdown */}
                 <div className="space-y-2.5 text-sm">
                   {pricing.breakdown.baseFare > 0 && (
                     <div className="flex justify-between">
-                      <span className="text-white/50">Prise en charge</span>
+                      <span className="text-white/50">Base fare</span>
                       <span className="text-white">{pricing.breakdown.baseFare}€</span>
                     </div>
                   )}
@@ -506,28 +496,27 @@ export default function BookingForm() {
                   )}
                   {pricing.breakdown.nightSurcharge > 0 && (
                     <div className="flex justify-between">
-                      <span className="text-amber-400/80">Majoration nuit</span>
+                      <span className="text-amber-400/80">Night surcharge</span>
                       <span className="text-amber-400">+{pricing.breakdown.nightSurcharge}€</span>
                     </div>
                   )}
                   {pricing.breakdown.returnDiscount > 0 && (
                     <div className="flex justify-between">
-                      <span className="text-green-400/80">Remise aller-retour (-10%)</span>
-                      <span className="text-green-400">-{pricing.breakdown.returnDiscount}€</span>
+                      <span className="text-green-400/80">Round-trip discount (−10%)</span>
+                      <span className="text-green-400">−{pricing.breakdown.returnDiscount}€</span>
                     </div>
                   )}
                   <div className="pt-2 border-t border-white/10 flex justify-between font-semibold">
-                    <span className="text-white">Total TTC</span>
+                    <span className="text-white">Total incl. tax</span>
                     <span className="text-gold">{pricing.price}€</span>
                   </div>
                 </div>
               </div>
 
-              {/* Info notes */}
               <div className="text-xs text-white/30 space-y-1">
-                <p>* Tarif estimatif. Le prix final est confirmé par le chauffeur.</p>
-                <p>* Tarif nuit : 20h — 7h (+15%).</p>
-                <p>* Péages et frais de stationnement non inclus pour les longues distances.</p>
+                <p>* Estimated fare. Final price confirmed by your chauffeur.</p>
+                <p>* Night rate applies between 20:00 and 07:00 (+15%).</p>
+                <p>* Tolls and parking fees not included for long distances.</p>
               </div>
             </>
           )}
@@ -537,17 +526,17 @@ export default function BookingForm() {
       {/* STEP 3 — Client info */}
       {step === 3 && (
         <div className="space-y-6 animate-fade-in">
-          <h2 className="font-serif text-2xl text-white">Vos coordonnées</h2>
+          <h2 className="font-serif text-2xl text-white">Your details</h2>
 
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs text-white/50 mb-2 tracking-wide uppercase">
-                  Prénom *
+                  First name *
                 </label>
                 <input
                   type="text"
-                  placeholder="Jean"
+                  placeholder="John"
                   value={form.firstName}
                   onChange={(e) => set('firstName', e.target.value)}
                   className="input-dark"
@@ -555,11 +544,11 @@ export default function BookingForm() {
               </div>
               <div>
                 <label className="block text-xs text-white/50 mb-2 tracking-wide uppercase">
-                  Nom *
+                  Last name *
                 </label>
                 <input
                   type="text"
-                  placeholder="Dupont"
+                  placeholder="Smith"
                   value={form.lastName}
                   onChange={(e) => set('lastName', e.target.value)}
                   className="input-dark"
@@ -573,7 +562,7 @@ export default function BookingForm() {
               </label>
               <input
                 type="email"
-                placeholder="jean.dupont@email.com"
+                placeholder="john.smith@email.com"
                 value={form.email}
                 onChange={(e) => set('email', e.target.value)}
                 className="input-dark"
@@ -582,11 +571,11 @@ export default function BookingForm() {
 
             <div>
               <label className="block text-xs text-white/50 mb-2 tracking-wide uppercase">
-                Téléphone *
+                Phone *
               </label>
               <input
                 type="tel"
-                placeholder="06 XX XX XX XX"
+                placeholder="+33 6 XX XX XX XX"
                 value={form.phone}
                 onChange={(e) => set('phone', e.target.value)}
                 className="input-dark"
@@ -595,10 +584,10 @@ export default function BookingForm() {
 
             <div>
               <label className="block text-xs text-white/50 mb-2 tracking-wide uppercase">
-                Instructions spéciales (optionnel)
+                Special instructions (optional)
               </label>
               <textarea
-                placeholder="Numéro de vol, instructions particulières, adresse précise…"
+                placeholder="Flight number, specific address, preferences…"
                 value={form.notes}
                 onChange={(e) => set('notes', e.target.value)}
                 rows={3}
@@ -609,10 +598,10 @@ export default function BookingForm() {
             {/* Booking summary */}
             <div className="p-4 rounded border border-gold/15 bg-gold/5 space-y-2 text-sm">
               <div className="text-gold text-xs font-semibold tracking-widest uppercase mb-3">
-                Récapitulatif
+                Summary
               </div>
               <div className="flex justify-between">
-                <span className="text-white/50">Trajet</span>
+                <span className="text-white/50">Journey</span>
                 <span className="text-white text-right">
                   {form.departure}
                   {form.arrival && ` → ${form.arrival}`}
@@ -620,26 +609,26 @@ export default function BookingForm() {
               </div>
               <div className="flex justify-between">
                 <span className="text-white/50">Date</span>
-                <span className="text-white">{form.date} à {form.time}</span>
+                <span className="text-white">{form.date} at {form.time}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-white/50">Passagers</span>
+                <span className="text-white/50">Passengers</span>
                 <span className="text-white">{form.passengers}</span>
               </div>
               {pricing && (
                 <div className="flex justify-between pt-2 border-t border-white/10 font-semibold">
-                  <span className="text-white">Montant estimé</span>
+                  <span className="text-white">Estimated amount</span>
                   <span className="text-gold">{pricing.price}€</span>
                 </div>
               )}
             </div>
 
             <p className="text-xs text-white/30">
-              En confirmant, vous acceptez nos{' '}
+              By confirming, you agree to our{' '}
               <a href="/cgv" className="text-gold/60 underline hover:text-gold">
-                conditions générales de vente
+                terms and conditions
               </a>
-              . Paiement possible par carte, espèces ou virement.
+              . Payment by card, cash or bank transfer.
             </p>
           </div>
         </div>
@@ -651,32 +640,32 @@ export default function BookingForm() {
           <div className="w-20 h-20 rounded-full bg-gold/20 flex items-center justify-center mx-auto mb-6">
             <CheckCircle className="w-10 h-10 text-gold" />
           </div>
-          <h2 className="font-serif text-3xl text-white mb-3">Réservation confirmée !</h2>
+          <h2 className="font-serif text-3xl text-white mb-3">Booking confirmed!</h2>
           {bookingId && (
             <div className="inline-block px-4 py-1.5 rounded bg-gold/10 border border-gold/20 text-gold text-sm font-mono mb-5">
               #{bookingId}
             </div>
           )}
           <p className="text-white/60 text-sm max-w-sm mx-auto mb-2">
-            Un email de confirmation a été envoyé à{' '}
+            A confirmation email has been sent to{' '}
             <strong className="text-white">{form.email}</strong>.
           </p>
           <p className="text-white/40 text-sm mb-8">
-            Votre chauffeur vous contactera 30 minutes avant la prise en charge.
+            Your chauffeur will contact you 30 minutes before pickup.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a
               href={`/reservation/confirmation?id=${bookingId}`}
               className="btn-gold px-6 py-3 rounded text-sm text-[#0A0A0A] font-semibold tracking-widest uppercase inline-flex items-center gap-2"
             >
-              Voir ma réservation
+              View my booking
               <ArrowRight className="w-4 h-4" />
             </a>
             <a
               href="/"
               className="btn-outline-gold px-6 py-3 rounded text-sm font-semibold tracking-widest uppercase"
             >
-              Retour à l'accueil
+              Back to home
             </a>
           </div>
         </div>
@@ -691,7 +680,7 @@ export default function BookingForm() {
               className="flex items-center gap-2 px-5 py-3 rounded border border-dark-400 text-white/60 hover:text-white hover:border-white/20 text-sm transition-colors"
             >
               <ChevronLeft className="w-4 h-4" />
-              Retour
+              Back
             </button>
           )}
           <button
@@ -713,16 +702,16 @@ export default function BookingForm() {
             {submitting ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                Confirmation…
+                Confirming…
               </>
             ) : step === 3 ? (
               <>
-                Confirmer la réservation
+                Confirm booking
                 <CheckCircle className="w-4 h-4" />
               </>
             ) : (
               <>
-                Continuer
+                Continue
                 <ChevronRight className="w-4 h-4" />
               </>
             )}

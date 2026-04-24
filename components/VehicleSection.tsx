@@ -2,12 +2,12 @@ import Link from 'next/link'
 import { ArrowRight, Wifi, Battery, Wind, Shield, Volume2, Smartphone } from 'lucide-react'
 
 const features = [
-  { icon: Wifi, label: 'Wi-Fi Premium', sub: 'Connexion haut débit' },
-  { icon: Battery, label: 'Tesla EV', sub: '100% électrique' },
-  { icon: Wind, label: 'Climatisation', sub: 'Ambiance personnalisée' },
-  { icon: Shield, label: 'Sécurité', sub: 'Conduite assistée' },
-  { icon: Volume2, label: 'Sono premium', sub: 'Sonos / Bose' },
-  { icon: Smartphone, label: 'Chargeur USB', sub: 'Recharge à bord' },
+  { icon: Wifi, label: 'Premium Wi-Fi', sub: 'High-speed onboard connection' },
+  { icon: Battery, label: 'Tesla EV', sub: '100% electric' },
+  { icon: Wind, label: 'Climate Control', sub: 'Personalised ambient temperature' },
+  { icon: Shield, label: 'Safety', sub: 'Autopilot-assisted driving' },
+  { icon: Volume2, label: 'Premium Audio', sub: 'Crystal clear surround sound' },
+  { icon: Smartphone, label: 'USB Charging', sub: 'Charge all devices onboard' },
 ]
 
 export default function VehicleSection() {
@@ -20,19 +20,19 @@ export default function VehicleSection() {
             <div className="flex items-center gap-3 mb-6">
               <div className="h-px w-12 bg-gold" />
               <span className="text-gold text-xs tracking-[0.3em] uppercase font-semibold">
-                Le Véhicule
+                The Vehicle
               </span>
             </div>
 
             <h2 className="font-serif text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
-              L'excellence à bord d'une{' '}
-              <span className="text-gradient-gold">Tesla Model S</span>
+              Excellence aboard a{' '}
+              <span className="text-gradient-gold">Tesla Model Y</span>
             </h2>
 
             <p className="text-white/60 text-lg leading-relaxed mb-8">
-              Voyagez dans un silence total à bord de notre berline premium entièrement
-              électrique. Confort exceptionnel, technologies de pointe et conduite fluide pour
-              une expérience de transport sans égale.
+              Travel in complete silence aboard our premium 7-seat electric SUV.
+              Exceptional comfort, cutting-edge technology and fluid drive
+              for an unmatched transportation experience.
             </p>
 
             {/* Features grid */}
@@ -54,68 +54,43 @@ export default function VehicleSection() {
               href="/reservation"
               className="btn-gold inline-flex items-center gap-2 px-6 py-3.5 rounded text-[#0A0A0A] text-sm font-semibold tracking-widest uppercase"
             >
-              Réserver ce véhicule
+              Book this vehicle
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
 
-          {/* Right: Vehicle visual */}
+          {/* Right: Vehicle photo */}
           <div className="relative">
             {/* Background glow */}
             <div
-              className="absolute inset-0 rounded-2xl"
+              className="absolute inset-0 rounded-2xl pointer-events-none"
               style={{
                 background:
-                  'radial-gradient(ellipse at center, rgba(201,169,110,0.12) 0%, transparent 70%)',
+                  'radial-gradient(ellipse at center, rgba(201,169,110,0.15) 0%, transparent 70%)',
               }}
             />
 
-            {/* Car placeholder — elegant dark card */}
-            <div className="relative glass-card rounded-2xl overflow-hidden aspect-[4/3] flex items-center justify-center">
-              {/* Simulated car silhouette using CSS */}
-              <div className="absolute inset-0 bg-gradient-to-b from-dark-200 to-dark-300" />
-
-              {/* Horizontal light beam effect */}
+            <div className="relative glass-card rounded-2xl overflow-hidden aspect-[4/3]">
+              {/* Tesla exterior photo */}
               <div
-                className="absolute left-0 right-0 h-px top-1/2"
+                className="absolute inset-0 bg-cover bg-center"
+                style={{ backgroundImage: "url('/images/tesla-exterior.jpg')" }}
+              />
+              <div
+                className="absolute inset-0"
                 style={{
-                  background: 'linear-gradient(90deg, transparent, rgba(201,169,110,0.4), transparent)',
+                  background:
+                    'linear-gradient(to top, rgba(10,10,10,0.9) 0%, rgba(10,10,10,0.1) 60%, transparent 100%)',
                 }}
               />
 
-              <div className="relative text-center">
-                {/* Tesla-like logo placeholder */}
-                <svg
-                  viewBox="0 0 200 70"
-                  className="w-48 h-auto mx-auto mb-4 opacity-60"
-                  fill="currentColor"
-                >
-                  <text
-                    x="100"
-                    y="50"
-                    textAnchor="middle"
-                    className="text-gold"
-                    fill="#C9A96E"
-                    fontSize="52"
-                    fontFamily="Georgia, serif"
-                    fontWeight="bold"
-                    letterSpacing="8"
-                  >
-                    TESLA
-                  </text>
-                </svg>
-                <div className="text-white/30 text-xs tracking-[0.3em] uppercase">
-                  Model S — Intérieur cuir blanc
-                </div>
-              </div>
-
               {/* Bottom specs bar */}
-              <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-white/5">
+              <div className="absolute bottom-0 left-0 right-0 p-5">
                 <div className="grid grid-cols-3 gap-2 text-center">
                   {[
-                    { v: '7', u: 'places', l: 'Capacité' },
-                    { v: '0→100', u: '2.3s', l: 'Accélération' },
-                    { v: '600', u: 'km', l: 'Autonomie' },
+                    { v: '7', u: 'seats', l: 'Capacity' },
+                    { v: '5.1', u: 's', l: '0–100 km/h' },
+                    { v: '533', u: 'km', l: 'Range' },
                   ].map(({ v, u, l }) => (
                     <div key={l}>
                       <div className="text-gold text-base font-bold font-serif">
@@ -130,7 +105,7 @@ export default function VehicleSection() {
               </div>
             </div>
 
-            {/* Decorative corner element */}
+            {/* Decorative corners */}
             <div className="absolute -top-3 -right-3 w-16 h-16 border-t border-r border-gold/20 rounded-tr-2xl" />
             <div className="absolute -bottom-3 -left-3 w-16 h-16 border-b border-l border-gold/20 rounded-bl-2xl" />
           </div>

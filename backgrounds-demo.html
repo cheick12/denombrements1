@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Backgrounds — Style Bleu Luxe</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#030812; font-family:'Segoe UI',sans-serif; overflow:hidden; height:100vh; }
+
+  /* NAV */
+  .nav {
+    position:fixed; top:0; left:0; right:0; z-index:1000;
+    display:flex; align-items:center; gap:10px; padding:16px 24px;
+    background:rgba(3,8,18,0.85); backdrop-filter:blur(16px);
+    border-bottom:1px solid rgba(201,160,85,0.15);
+    overflow-x:auto; flex-wrap:nowrap;
+  }
+  .nav-label {
+    color:rgba(201,160,85,0.5); font-size:9px; letter-spacing:3px;
+    text-transform:uppercase; white-space:nowrap; margin-right:8px;
+  }
+  .nav-btn {
+    flex-shrink:0; padding:9px 18px;
+    border:1px solid rgba(201,160,85,0.35);
+    background:transparent; color:#C9A055;
+    font-size:10px; letter-spacing:2px; text-transform:uppercase;
+    cursor:pointer; transition:all .25s; white-space:nowrap; border-radius:1px;
+  }
+  .nav-btn.active { background:#C9A055; color:#030812; border-color:#C9A055; }
+  .nav-btn:hover:not(.active) { background:rgba(201,160,85,0.1); }
+
+  /* SCENES */
+  .scene { position:fixed; inset:0; display:none; }
+  .scene.active { display:block; }
+
+  /* LABEL CENTER */
+  .label {
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    text-align:center; pointer-events:none; z-index:10;
+  }
+  .label h2 {
+    font-size:clamp(32px,6vw,80px); font-weight:200;
+    letter-spacing:12px; color:#fff; text-transform:uppercase;
+    text-shadow:0 0 60px rgba(30,100,220,0.6), 0 0 120px rgba(30,100,220,0.3);
+  }
+  .label h2 em { color:#C9A055; font-style:italic; }
+  .label p {
+    font-size:10px; letter-spacing:5px; color:rgba(201,160,85,0.7);
+    margin-top:12px; text-transform:uppercase;
+  }
+  .label .badge {
+    display:inline-block; margin-top:20px;
+    padding:8px 24px; border:1px solid rgba(201,160,85,0.4);
+    font-size:9px; letter-spacing:4px; color:#C9A055; text-transform:uppercase;
+  }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <span class="nav-label">Choisir :</span>
+  <button class="nav-btn active" onclick="show(1)">A — Orbes Bleu Nuit</button>
+  <button class="nav-btn" onclick="show(2)">B — Orbes Bleu Électrique</button>
+  <button class="nav-btn" onclick="show(3)">C — Vagues Bleues</button>
+  <button class="nav-btn" onclick="show(4)">D — Vagues + Or</button>
+  <button class="nav-btn" onclick="show(5)">E — Combinaison 3+4</button>
+</div>
+
+<!-- A : ORBES BLEU NUIT -->
+<div class="scene active" id="s1">
+  <canvas id="c1"></canvas>
+  <div class="label">
+    <h2>Élite <em>Drive</em></h2>
+    <p>Chauffeur Privé · Tesla Model Y · 6 Places</p>
+    <div class="badge">Réserver maintenant</div>
+  </div>
+</div>
+
+<!-- B : ORBES BLEU ÉLECTRIQUE -->
+<div class="scene" id="s2">
+  <canvas id="c2"></canvas>
+  <div class="label">
+    <h2>Élite <em>Drive</em></h2>
+    <p>Chauffeur Privé · Tesla Model Y · 6 Places</p>
+    <div class="badge">Réserver maintenant</div>
+  </div>
+</div>
+
+<!-- C : VAGUES BLEUES -->
+<div class="scene" id="s3">
+  <canvas id="c3"></canvas>
+  <div class="label">
+    <h2>Élite <em>Drive</em></h2>
+    <p>Chauffeur Privé · Tesla Model Y · 6 Places</p>
+    <div class="badge">Réserver maintenant</div>
+  </div>
+</div>
+
+<!-- D : VAGUES OR + BLEU -->
+<div class="scene" id="s4">
+  <canvas id="c4"></canvas>
+  <div class="label">
+    <h2>Élite <em>Drive</em></h2>
+    <p>Chauffeur Privé · Tesla Model Y · 6 Places</p>
+    <div class="badge">Réserver maintenant</div>
+  </div>
+</div>
+
+<!-- E : COMBO ORBES + VAGUES -->
+<div class="scene" id="s5">
+  <canvas id="c5a" style="position:absolute;inset:0;"></canvas>
+  <canvas id="c5b" style="position:absolute;inset:0;mix-blend-mode:screen;opacity:0.55;"></canvas>
+  <div class="label">
+    <h2>Élite <em>Drive</em></h2>
+    <p>Chauffeur Privé · Tesla Model Y · 6 Places</p>
+    <div class="badge">Réserver maintenant</div>
+  </div>
+</div>
+
+<script>
+function show(n) {
+  document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('s'+n).classList.add('active');
+  document.querySelectorAll('.nav-btn')[n-1].classList.add('active');
+}
+
+// ── Utility ──────────────────────────────────────────
+function initGL(id) {
+  const c = document.getElementById(id);
+  c.width = innerWidth; c.height = innerHeight;
+  window.addEventListener('resize',()=>{ c.width=innerWidth; c.height=innerHeight; if(c._vp) c._vp(); });
+  return c.getContext('webgl') || c.getContext('experimental-webgl');
+}
+function glProg(gl, vs, fs) {
+  const compile = (t,s) => { const sh=gl.createShader(t); gl.shaderSource(sh,s); gl.compileShader(sh); return sh; };
+  const p = gl.createProgram();
+  gl.attachShader(p, compile(gl.VERTEX_SHADER,vs));
+  gl.attachShader(p, compile(gl.FRAGMENT_SHADER,fs));
+  gl.linkProgram(p); gl.useProgram(p);
+  const buf=gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER,buf);
+  gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+  const a=gl.getAttribLocation(p,'a_pos');
+  gl.enableVertexAttribArray(a); gl.vertexAttribPointer(a,2,gl.FLOAT,false,0,0);
+  return p;
+}
+const VS = `attribute vec2 a_pos; void main(){gl_Position=vec4(a_pos,0,1);}`;
+
+let mx=0, my=0;
+document.addEventListener('mousemove',e=>{ mx=(e.clientX/innerWidth-.5)*2; my=-(e.clientY/innerHeight-.5)*2; });
+
+// ── SCENE A : Orbes Bleu Nuit ─────────────────────────
+(()=>{
+  const FS = `
+    precision highp float;
+    uniform float u_t; uniform vec2 u_r; uniform vec2 u_m;
+    float orb(vec2 uv, vec2 c, float r){ return smoothstep(r,0.,length(uv-c)); }
+    void main(){
+      vec2 uv=(gl_FragCoord.xy/u_r)*2.-1.;
+      uv.x*=u_r.x/u_r.y; uv+=u_m*.08;
+
+      vec3 col=vec3(.01,.025,.08);
+
+      // Orb 1 — bleu nuit profond
+      vec2 p1=vec2(sin(u_t*.18)*.9-0.3, cos(u_t*.13)*.7);
+      col+=orb(uv,p1,.95)*vec3(.02,.06,.28)*2.;
+
+      // Orb 2 — bleu royal
+      vec2 p2=vec2(cos(u_t*.14)*.8+0.4, sin(u_t*.11)*.75-.1);
+      col+=orb(uv,p2,.8)*vec3(.01,.04,.22)*2.5;
+
+      // Orb 3 — or subtil
+      vec2 p3=vec2(sin(u_t*.22+1.5)*.5, cos(u_t*.17+2.)*.9-.3);
+      col+=orb(uv,p3,.55)*vec3(.18,.12,.03)*1.8;
+
+      // Orb 4 — bleu cyan
+      vec2 p4=vec2(cos(u_t*.09+3.)*.95, sin(u_t*.15)*.5+.4);
+      col+=orb(uv,p4,.65)*vec3(.02,.09,.25)*1.5;
+
+      // Orb 5 — bleu nuit large
+      vec2 p5=vec2(sin(u_t*.07+5.)*.7-.5, cos(u_t*.12+1.)*1.0);
+      col+=orb(uv,p5,1.2)*vec3(.01,.03,.15)*1.2;
+
+      // Vignette
+      float vig=1.-length(uv*.5)*.8;
+      col*=max(0.,vig);
+
+      // Grain subtle
+      float grain=fract(sin(dot(gl_FragCoord.xy,vec2(127.1,311.7)))*43758.5)*0.025-0.012;
+      col+=grain;
+
+      gl_FragColor=vec4(clamp(col,0.,1.),1.);
+    }
+  `;
+  const gl=initGL('c1'); if(!gl) return;
+  const p=glProg(gl,VS,FS);
+  const uT=gl.getUniformLocation(p,'u_t'), uR=gl.getUniformLocation(p,'u_r'), uM=gl.getUniformLocation(p,'u_m');
+  const c=document.getElementById('c1');
+  c._vp=()=>gl.viewport(0,0,c.width,c.height);
+  const s=Date.now();
+  (function tick(){ requestAnimationFrame(tick);
+    const t=(Date.now()-s)/1000;
+    gl.viewport(0,0,c.width,c.height);
+    gl.uniform1f(uT,t); gl.uniform2f(uR,c.width,c.height); gl.uniform2f(uM,mx,my);
+    gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+  })();
+})();
+
+// ── SCENE B : Orbes Bleu Électrique ──────────────────
+(()=>{
+  const FS = `
+    precision highp float;
+    uniform float u_t; uniform vec2 u_r; uniform vec2 u_m;
+    float orb(vec2 uv,vec2 c,float r){ return smoothstep(r,0.,length(uv-c)); }
+    void main(){
+      vec2 uv=(gl_FragCoord.xy/u_r)*2.-1.;
+      uv.x*=u_r.x/u_r.y; uv+=u_m*.1;
+
+      vec3 col=vec3(.005,.010,.025);
+
+      // Bleu électrique vif
+      vec2 p1=vec2(sin(u_t*.17)*.8-.2, cos(u_t*.13)*.7);
+      col+=orb(uv,p1,.7)*vec3(.04,.15,.9)*3.;
+
+      // Bleu cobalt
+      vec2 p2=vec2(cos(u_t*.12)*.9+.3, sin(u_t*.10)*.8-.2);
+      col+=orb(uv,p2,.75)*vec3(.02,.08,.6)*2.5;
+
+      // Or vif
+      vec2 p3=vec2(sin(u_t*.20+2.)*.6, cos(u_t*.16+1.)*.8-.4);
+      col+=orb(uv,p3,.45)*vec3(.8,.55,.1)*2.;
+
+      // Cyan
+      vec2 p4=vec2(cos(u_t*.08+4.)*.85, sin(u_t*.14)*.6+.5);
+      col+=orb(uv,p4,.5)*vec3(.05,.4,.8)*2.;
+
+      // Bleu profond large
+      vec2 p5=vec2(sin(u_t*.06+5.)*.9-.4, cos(u_t*.11+2.)*.95);
+      col+=orb(uv,p5,1.1)*vec3(.01,.05,.35)*1.5;
+
+      float vig=1.-length(uv*.5)*.9;
+      col*=max(0.,vig);
+
+      float grain=fract(sin(dot(gl_FragCoord.xy,vec2(127.1,311.7)))*43758.5)*0.02-.01;
+      col+=grain;
+
+      gl_FragColor=vec4(clamp(col,0.,1.),1.);
+    }
+  `;
+  const gl=initGL('c2'); if(!gl) return;
+  const p=glProg(gl,VS,FS);
+  const uT=gl.getUniformLocation(p,'u_t'),uR=gl.getUniformLocation(p,'u_r'),uM=gl.getUniformLocation(p,'u_m');
+  const c=document.getElementById('c2');
+  c._vp=()=>gl.viewport(0,0,c.width,c.height);
+  const s=Date.now();
+  (function tick(){ requestAnimationFrame(tick);
+    const t=(Date.now()-s)/1000;
+    gl.viewport(0,0,c.width,c.height);
+    gl.uniform1f(uT,t); gl.uniform2f(uR,c.width,c.height); gl.uniform2f(uM,mx,my);
+    gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+  })();
+})();
+
+// ── SCENE C : Vagues Bleues ───────────────────────────
+(()=>{
+  const FS = `
+    precision highp float;
+    uniform float u_t; uniform vec2 u_r; uniform vec2 u_m;
+    float wave(vec2 uv,float f,float s,float a){ return sin(uv.x*f+u_t*s)*cos(uv.y*f*.7+u_t*s*.8)*a; }
+    void main(){
+      vec2 uv=(gl_FragCoord.xy-u_r*.5)/u_r.y;
+      uv+=u_m*.12;
+      float w=wave(uv,8.,1.,0.07)+wave(uv,14.,.8,.05)+wave(uv,22.,1.4,.025)+wave(uv*2.,5.,.6,.03);
+      float bright=smoothstep(-.1,.1,w);
+      vec3 dark=vec3(.01,.015,.05);
+      vec3 blue=vec3(.04,.12,.55);
+      vec3 gold=vec3(.78,.63,.33);
+      vec3 col=mix(dark,blue,bright*.7);
+      col=mix(col,gold,bright*bright*.5);
+      // Lueur de fond bleue
+      float bg=length(uv)*.8;
+      col+=vec3(.01,.03,.12)*smoothstep(1.,.0,bg);
+      float vig=1.-length(uv)*1.1;
+      col*=max(0.,vig);
+      gl_FragColor=vec4(clamp(col,0.,1.),1.);
+    }
+  `;
+  const gl=initGL('c3'); if(!gl) return;
+  const p=glProg(gl,VS,FS);
+  const uT=gl.getUniformLocation(p,'u_t'),uR=gl.getUniformLocation(p,'u_r'),uM=gl.getUniformLocation(p,'u_m');
+  const c=document.getElementById('c3');
+  c._vp=()=>gl.viewport(0,0,c.width,c.height);
+  const s=Date.now();
+  (function tick(){ requestAnimationFrame(tick);
+    const t=(Date.now()-s)/1000;
+    gl.viewport(0,0,c.width,c.height);
+    gl.uniform1f(uT,t); gl.uniform2f(uR,c.width,c.height); gl.uniform2f(uM,mx,my);
+    gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+  })();
+})();
+
+// ── SCENE D : Vagues Or + Bleu ───────────────────────
+(()=>{
+  const FS = `
+    precision highp float;
+    uniform float u_t; uniform vec2 u_r; uniform vec2 u_m;
+    float wave(vec2 uv,float f,float s,float a){ return sin(uv.x*f+u_t*s)*cos(uv.y*f*.6+u_t*s*.9)*a; }
+    void main(){
+      vec2 uv=(gl_FragCoord.xy-u_r*.5)/u_r.y;
+      uv+=u_m*.1;
+      float w=wave(uv,7.,1.1,.08)+wave(uv,13.,.85,.05)+wave(uv,20.,1.6,.03)+wave(uv*1.5,9.,.7,.025);
+      float b=smoothstep(-.12,.12,w);
+      // Or dominant + bleu
+      vec3 dark=vec3(.015,.012,.03);
+      vec3 gold=vec3(.78,.55,.15);
+      vec3 blue=vec3(.05,.1,.5);
+      vec3 col=mix(dark,gold,b*.9);
+      col=mix(col,blue,b*b*.3);
+      // Lueur or au centre
+      float glow=smoothstep(.8,0.,length(uv));
+      col+=vec3(.12,.09,.02)*glow;
+      float vig=1.-length(uv)*1.0;
+      col*=max(0.,vig);
+      gl_FragColor=vec4(clamp(col,0.,1.),1.);
+    }
+  `;
+  const gl=initGL('c4'); if(!gl) return;
+  const p=glProg(gl,VS,FS);
+  const uT=gl.getUniformLocation(p,'u_t'),uR=gl.getUniformLocation(p,'u_r'),uM=gl.getUniformLocation(p,'u_m');
+  const c=document.getElementById('c4');
+  c._vp=()=>gl.viewport(0,0,c.width,c.height);
+  const s=Date.now();
+  (function tick(){ requestAnimationFrame(tick);
+    const t=(Date.now()-s)/1000;
+    gl.viewport(0,0,c.width,c.height);
+    gl.uniform1f(uT,t); gl.uniform2f(uR,c.width,c.height); gl.uniform2f(uM,mx,my);
+    gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+  })();
+})();
+
+// ── SCENE E : Combo Orbes + Vagues ───────────────────
+(()=>{
+  // Layer 1 : orbes (canvas c5a)
+  const FS_ORB = `
+    precision highp float;
+    uniform float u_t; uniform vec2 u_r; uniform vec2 u_m;
+    float orb(vec2 uv,vec2 c,float r){ return smoothstep(r,0.,length(uv-c)); }
+    void main(){
+      vec2 uv=(gl_FragCoord.xy/u_r)*2.-1.;
+      uv.x*=u_r.x/u_r.y; uv+=u_m*.07;
+      vec3 col=vec3(.01,.02,.07);
+      col+=orb(uv,vec2(sin(u_t*.18)*.8-.2,cos(u_t*.13)*.7),.9)*vec3(.02,.07,.35)*2.;
+      col+=orb(uv,vec2(cos(u_t*.13)*.85+.3,sin(u_t*.11)*.75-.1),.75)*vec3(.01,.04,.22)*2.;
+      col+=orb(uv,vec2(sin(u_t*.21+1.5)*.5,cos(u_t*.16+2.)*.9-.3),.5)*vec3(.25,.17,.04)*1.8;
+      col+=orb(uv,vec2(cos(u_t*.09+3.)*.9,sin(u_t*.14)*.6+.4),.6)*vec3(.03,.10,.3)*1.4;
+      col+=orb(uv,vec2(sin(u_t*.07+5.)*.8-.5,cos(u_t*.12+1.)*.95),1.2)*vec3(.01,.03,.18)*1.;
+      float vig=1.-length(uv*.48)*.75; col*=max(0.,vig);
+      gl_FragColor=vec4(clamp(col,0.,1.),1.);
+    }
+  `;
+  // Layer 2 : vagues (canvas c5b)
+  const FS_WAVE = `
+    precision highp float;
+    uniform float u_t; uniform vec2 u_r; uniform vec2 u_m;
+    float wave(vec2 uv,float f,float s,float a){ return sin(uv.x*f+u_t*s)*cos(uv.y*f*.7+u_t*s*.8)*a; }
+    void main(){
+      vec2 uv=(gl_FragCoord.xy-u_r*.5)/u_r.y; uv+=u_m*.08;
+      float w=wave(uv,9.,1.,.06)+wave(uv,16.,.8,.04)+wave(uv,25.,1.5,.02);
+      float b=smoothstep(-.08,.08,w);
+      vec3 col=vec3(0.);
+      col+=vec3(.05,.2,.9)*b*1.2;
+      col+=vec3(.7,.5,.1)*b*b*.6;
+      float vig=1.-length(uv)*1.2; col*=max(0.,vig);
+      gl_FragColor=vec4(clamp(col,0.,1.),1.);
+    }
+  `;
+
+  const gl1=initGL('c5a'); if(!gl1) return;
+  const p1=glProg(gl1,VS,FS_ORB);
+  const u1T=gl1.getUniformLocation(p1,'u_t'),u1R=gl1.getUniformLocation(p1,'u_r'),u1M=gl1.getUniformLocation(p1,'u_m');
+  const ca=document.getElementById('c5a');
+
+  const gl2=initGL('c5b'); if(!gl2) return;
+  const p2=glProg(gl2,VS,FS_WAVE);
+  const u2T=gl2.getUniformLocation(p2,'u_t'),u2R=gl2.getUniformLocation(p2,'u_r'),u2M=gl2.getUniformLocation(p2,'u_m');
+  const cb=document.getElementById('c5b');
+
+  const s=Date.now();
+  (function tick(){ requestAnimationFrame(tick);
+    const t=(Date.now()-s)/1000;
+    gl1.viewport(0,0,ca.width,ca.height);
+    gl1.uniform1f(u1T,t); gl1.uniform2f(u1R,ca.width,ca.height); gl1.uniform2f(u1M,mx,my);
+    gl1.drawArrays(gl1.TRIANGLE_STRIP,0,4);
+    gl2.viewport(0,0,cb.width,cb.height);
+    gl2.uniform1f(u2T,t); gl2.uniform2f(u2R,cb.width,cb.height); gl2.uniform2f(u2M,mx,my);
+    gl2.drawArrays(gl2.TRIANGLE_STRIP,0,4);
+  })();
+})();
+</script>
+</body>
+</html>
